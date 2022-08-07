@@ -1,0 +1,2 @@
+alias sq=sqlite-utils
+alias sqm="sqlite-utils memory"
