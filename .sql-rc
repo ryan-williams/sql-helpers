@@ -1,2 +1,15 @@
 alias sq=sqlite-utils
 alias sqm="sqlite-utils memory"
+
+sqlite_table_rows() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: sqlite_table_rows <db>" >&2
+        return 1
+    fi
+    db="$1"; shift
+    echo "SELECT 'SELECT count(*), \"' || name || '\" FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
+    | sqlite3 "$db" \
+    | sqlite3 "$db"
+}
+export -f sqlite_table_rows
+defn sqlite_table_rows str
