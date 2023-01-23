@@ -7,9 +7,33 @@ sqlite_table_rows() {
         return 1
     fi
     db="$1"; shift
-    echo "SELECT 'SELECT count(*), \"' || name || '\" FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
+    echo "SELECT 'SELECT \"' || name || '\", count(*) FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
     | sqlite3 "$db" \
     | sqlite3 "$db"
 }
 export -f sqlite_table_rows
-defn sqlite_table_rows str
+defn str sqlite_table_rows
+
+sqlite_list_tables() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: sqlite_table_rows <db>" >&2
+        return 1
+    fi
+    db="$1"; shift
+    sqlite3 "$db" 'SELECT name FROM sqlite_master WHERE type="table"'
+}
+export -f sqlite_list_tables
+defn slt sqlite_list_tables
+
+sqlite_table_schemas() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: sqlite_table_rows <db>" >&2
+        return 1
+    fi
+    db="$1"; shift
+    echo "SELECT '.schema \"' || name || '\"'  FROM sqlite_master WHERE type = 'table';" \
+    | sqlite3 "$db" \
+    | sqlite3 "$db"
+}
+export -f sqlite_table_schemas
+defn sts sqlite_table_schemas
