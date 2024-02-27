@@ -26,14 +26,20 @@ export -f sqlite_list_tables
 defn slt sqlite_list_tables
 
 sqlite_table_schemas() {
-    if [ $# -ne 1 ]; then
-        echo "Usage: sqlite_table_rows <db>" >&2
+    if [ $# -eq 0 ]; then
+        echo "Usage: sqlite_table_rows <db> [tbl...]" >&2
         return 1
     fi
     db="$1"; shift
-    echo "SELECT '.schema \"' || name || '\"'  FROM sqlite_master WHERE type = 'table';" \
-    | sqlite3 "$db" \
-    | sqlite3 "$db"
+    if [ $# -gt 0 ]; then
+        for tbl in "$@"; do
+            sqlite3 "$db" ".schema $tbl"
+        done
+    else
+        echo "SELECT '.schema \"' || name || '\"'  FROM sqlite_master WHERE type = 'table';" \
+        | sqlite3 "$db" \
+        | sqlite3 "$db"
+     fi
 }
 export -f sqlite_table_schemas
 defn sts sqlite_table_schemas
