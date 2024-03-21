@@ -13,6 +13,7 @@ sqlite_table_rows() {
 }
 export -f sqlite_table_rows
 defn str sqlite_table_rows
+defn stc sqlite_table_rows
 
 sqlite_list_tables() {
     if [ $# -ne 1 ]; then
