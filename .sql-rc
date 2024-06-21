@@ -44,3 +44,18 @@ sqlite_table_schemas() {
 }
 export -f sqlite_table_schemas
 defn sts sqlite_table_schemas
+
+sqlite2parquet() {
+    if [ $# -lt 3 ]; then
+        echo "Usage: sqlite2parquet <db_path> <tbl> <pqt_path> [sql_opts] [pqt_opts]" >&2
+        return 1
+    fi
+    db_path="$1"; shift
+    tbl="$1"; shift
+    pqt_path="$1"; shift
+    sql_opts="$1"; shift
+    pqt_opts="$1"; shift
+    python -c "import pandas as pd; df = pd.read_sql_table('$2', 'sqlite:///$1', $sql_opts); df.to_parquet('$3', $pqt_opts); print(len(df))"
+}
+export -f sqlite2parquet
+defn s2p sqlite2parquet
