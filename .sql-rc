@@ -1,4 +1,5 @@
-alias sq=sqlite-utils
+alias sq=sqlite3
+alias squ=sqlite-utils
 alias sqm="sqlite-utils memory"
 
 sqlite_table_rows() {
