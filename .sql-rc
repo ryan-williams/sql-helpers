@@ -4,7 +4,7 @@ alias sqm="sqlite-utils memory"
 
 sqlite_table_rows() {
     if [ $# -ne 1 ]; then
-        echo "Usage: sqlite_table_rows <db>" >&2
+        echo "Usage: ${FUNCNAME[0]} <db>" >&2
         return 1
     fi
     db="$1"; shift
@@ -18,7 +18,7 @@ defn stc sqlite_table_rows
 
 sqlite_list_tables() {
     if [ $# -ne 1 ]; then
-        echo "Usage: sqlite_table_rows <db>" >&2
+        echo "Usage: ${FUNCNAME[0]} <db>" >&2
         return 1
     fi
     db="$1"; shift
@@ -29,7 +29,7 @@ defn slt sqlite_list_tables
 
 sqlite_table_schemas() {
     if [ $# -eq 0 ]; then
-        echo "Usage: sqlite_table_rows <db> [tbl...]" >&2
+        echo "Usage: ${FUNCNAME[0]} <db> [tbl...]" >&2
         return 1
     fi
     db="$1"; shift
@@ -48,7 +48,7 @@ defn sts sqlite_table_schemas
 
 sqlite2parquet() {
     if [ $# -lt 3 ]; then
-        echo "Usage: sqlite2parquet <db_path> <tbl> <pqt_path> [sql_opts] [pqt_opts]" >&2
+        echo "Usage: ${FUNCNAME[0]} <db_path> <tbl> <pqt_path> [sql_opts] [pqt_opts]" >&2
         return 1
     fi
     db_path="$1"; shift
