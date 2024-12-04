@@ -3,14 +3,20 @@ alias squ=sqlite-utils
 alias sqm="sqlite-utils memory"
 
 sqlite_table_rows() {
-    if [ $# -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} <db>" >&2
+    if [ $# -eq 0 ] || [ $# -gt 2 ]; then
+        echo "Usage: ${FUNCNAME[0]} <db> [table...]" >&2
         return 1
     fi
     db="$1"; shift
-    echo "SELECT 'SELECT \"' || name || '\", count(*) FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
-    | sqlite3 "$db" \
-    | sqlite3 "$db"
+    if [ $# -gt 0 ]; then
+        for tbl in "$@"; do
+            sqlite3 "$db" "SELECT count(*) FROM $tbl;"
+        done
+    else
+        echo "SELECT 'SELECT \"' || name || '\", count(*) FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
+        | sqlite3 "$db" \
+        | sqlite3 "$db"
+    fi
 }
 export -f sqlite_table_rows
 defn str sqlite_table_rows
