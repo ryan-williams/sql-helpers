@@ -22,6 +22,30 @@ export -f sqlite_table_rows
 defn str sqlite_table_rows
 defn stc sqlite_table_rows
 
+sqlite_head() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: ${FUNCNAME[0]} [...sqlite opts] [-n <num=10>] <db> <tbl>" >&2
+        return 1
+    fi
+    local tbl="${@:(($#))}"
+    local db="${@:(($#-1)):1}"
+    set -- "${@:1:$(($#-2))}"
+    local args=()
+    local n=10
+    while [ $# -gt 0 ]; do
+        arg="$1"; shift
+        case "$arg" in
+            -n) n="$1"; shift ;;
+            *) args+=("$arg") ;;
+        esac
+    done
+    sqlite3 "${args[@]}" "$db" "SELECT * FROM $tbl LIMIT $n;"
+}
+export -f sqlite_head
+defn sqh sqlite_head
+defn sqhh sqlite_head -headers
+defn sqhj sqlite_head -json
+
 sqlite_list_tables() {
     if [ $# -ne 1 ]; then
         echo "Usage: ${FUNCNAME[0]} <db>" >&2
