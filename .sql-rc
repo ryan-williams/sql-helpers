@@ -21,6 +21,7 @@ sqlite_table_rows() {
 export -f sqlite_table_rows
 defn str sqlite_table_rows
 defn stc sqlite_table_rows
+defn sqc sqlite_table_rows
 
 sqlite_head() {
     if [ $# -lt 2 ]; then
@@ -75,6 +76,7 @@ sqlite_table_schemas() {
 }
 export -f sqlite_table_schemas
 defn sts sqlite_table_schemas
+defn sqs sqlite_table_schemas
 
 sqlite2parquet() {
     if [ $# -lt 3 ]; then
