@@ -1,6 +1,7 @@
 alias sq=sqlite3
 alias squ=sqlite-utils
 alias sqm="sqlite-utils memory"
+defn sqr sqlite3 -readonly
 
 sqlite_table_rows() {
     if [ $# -eq 0 ] || [ $# -gt 2 ]; then
@@ -10,12 +11,12 @@ sqlite_table_rows() {
     db="$1"; shift
     if [ $# -gt 0 ]; then
         for tbl in "$@"; do
-            sqlite3 "$db" "SELECT count(*) FROM $tbl;"
+            sqlite3 -readonly "$db" "SELECT count(*) FROM $tbl;"
         done
     else
         echo "SELECT 'SELECT \"' || name || '\", count(*) FROM ' || name || ';'  FROM sqlite_master WHERE type = 'table';" \
-        | sqlite3 "$db" \
-        | sqlite3 "$db"
+        | sqlite3 -readonly "$db" \
+        | sqlite3 -readonly "$db"
     fi
 }
 export -f sqlite_table_rows
@@ -40,7 +41,7 @@ sqlite_head() {
             *) args+=("$arg") ;;
         esac
     done
-    sqlite3 "${args[@]}" "$db" "SELECT * FROM $tbl LIMIT $n;"
+    sqlite3 -readonly "${args[@]}" "$db" "SELECT * FROM $tbl LIMIT $n;"
 }
 export -f sqlite_head
 defn sqh sqlite_head
@@ -53,7 +54,7 @@ sqlite_list_tables() {
         return 1
     fi
     db="$1"; shift
-    sqlite3 "$db" 'SELECT name FROM sqlite_master WHERE type="table"'
+    sqlite3 -readonly "$db" 'SELECT name FROM sqlite_master WHERE type="table"'
 }
 export -f sqlite_list_tables
 defn slt sqlite_list_tables
@@ -66,12 +67,12 @@ sqlite_table_schemas() {
     db="$1"; shift
     if [ $# -gt 0 ]; then
         for tbl in "$@"; do
-            sqlite3 "$db" ".schema $tbl"
+            sqlite3 -readonly "$db" ".schema $tbl"
         done
     else
         echo "SELECT '.schema \"' || name || '\"'  FROM sqlite_master WHERE type = 'table';" \
-        | sqlite3 "$db" \
-        | sqlite3 "$db"
+        | sqlite3 -readonly "$db" \
+        | sqlite3 -readonly "$db"
      fi
 }
 export -f sqlite_table_schemas
